@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HAVANA Fitness — For Her, By Her</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --black:   #000000;
+  --off-black: #0A0A0A;
+  --grey:    #111111;
+  --grey2:   #181818;
+  --beige:   #D4C4B0;
+  --beige-l: #EDE4D9;
+  --beige-d: #B8A898;
+  --white:   #FFFFFF;
+  --gold:    #F0C040;
+  --gold-d:  #C9980A;
+  --green:   #2E4A35;
+  --green-l: #3D6147;
+  --warm:    #C8935A;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ═══════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════ */
+#cur {
+  width:14px; height:14px;
+  background: var(--gold);
+  border-radius:50%;
+  position:fixed; top:0; left:0; z-index:9999;
+  pointer-events:none;
+  mix-blend-mode:difference;
+  transform:translate(-50%,-50%);
+  transition:width .25s, height .25s;
+  will-change: transform;
+}
+#cur.big { width:42px; height:42px; }
+
+/* ═══════════════════════════════════════
+   GRAIN OVERLAY
+═══════════════════════════════════════ */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:0.03;
+  pointer-events:none;
+  z-index:8888;
+}
+
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.4rem 4vw;
+  background: rgba(0,0,0,0);
+  transition: background .4s;
+}
+nav.scrolled { background: rgba(0,0,0,0.92); backdrop-filter:blur(16px); border-bottom:1px solid rgba(240,192,64,0.1); }
+.nav-logo {
+  font-family:'Bebas Neue', sans-serif;
+  font-size:1.5rem; letter-spacing:.12em;
+  color:var(--white);
+  opacity:0; transition:opacity .4s;
+}
+.nav-logo.show { opacity:1; }
+.nav-logo span { color:var(--gold); font-family:'Dancing Script',cursive; font-size:.65em; }
+.nav-links { display:flex; gap:2.5rem; list-style:none; }
+.nav-links a {
+  font-family:'Montserrat',sans-serif;
+  font-size:.65rem; font-weight:700;
+  letter-spacing:.25em; text-transform:uppercase;
+  color:var(--white); text-decoration:none;
+  position:relative; padding-bottom:3px;
+  transition:color .2s;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:0; left:0; right:0;
+  height:1px; background:var(--gold);
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .3s cubic-bezier(.22,1,.36,1);
+}
+.nav-links a:hover { color:var(--gold); }
+.nav-links a:hover::after { transform:scaleX(1); }
+.nav-join {
+  background:var(--gold); color:var(--black) !important;
+  padding:.45rem 1.3rem !important; letter-spacing:.15em !important;
+  font-weight:900 !important;
+}
+.nav-join:hover { background:var(--beige) !important; color:var(--black) !important; }
+.nav-join::after { display:none !important; }
+
+/* ═══════════════════════════════════════
+   HERO — 3-column split with YOUR images
+═══════════════════════════════════════ */
+#hero {
+  height:100vh;
+  display:grid;
+  grid-template-columns:1fr 380px 1fr;
+  position:relative;
+  overflow:hidden;
+}
+.h-panel { position:relative; overflow:hidden; }
+.h-panel img {
+  width:100%; height:100%; object-fit:cover;
+  transform:scale(1.06);
+  transition:transform 10s ease;
+  filter:brightness(.5) contrast(1.08) saturate(.95);
+}
+.h-panel:hover img { transform:scale(1.0); }
+.h-panel-label {
+  position:absolute; bottom:2.5rem; left:1.8rem;
+  font-family:'Montserrat',sans-serif;
+  font-size:.58rem; letter-spacing:.32em; text-transform:uppercase;
+  color:var(--beige-d);
+  writing-mode:vertical-rl; transform:rotate(180deg);
+}
+
+/* center column */
+.h-center {
+  background:var(--black);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:0 2rem;
+  position:relative; z-index:10;
+}
+.h-eye {
+  font-family:'Montserrat',sans-serif;
+  font-size:.55rem; letter-spacing:.42em; text-transform:uppercase;
+  color:var(--beige-d);
+  margin-bottom:.9rem;
+  animation:fu 1s .15s both;
+}
+.h-logo {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(5.5rem,9vw,9.5rem);
+  letter-spacing:.05em; line-height:.88;
+  color:var(--white); text-align:center;
+  animation:fu 1s .3s both;
+}
+.h-script {
+  font-family:'Dancing Script',cursive;
+  font-size:clamp(2rem,3.2vw,3.5rem);
+  color:var(--beige);
+  text-align:center; margin-top:.1rem;
+  animation:fu 1s .45s both;
+}
+.h-divider {
+  width:40px; height:1px; background:rgba(240,192,64,.35);
+  margin:1.6rem auto;
+  animation:fu 1s .55s both;
+}
+.h-tag {
+  font-size:.6rem; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(255,255,255,.3); text-align:center; line-height:2;
+  animation:fu 1s .6s both;
+}
+.h-cta {
+  margin-top:2rem;
+  animation:fu 1s .75s both;
+}
+.btn-gold {
+  display:inline-block;
+  background:var(--gold); color:var(--black);
+  font-family:'Montserrat',sans-serif;
+  font-size:.65rem; font-weight:900; letter-spacing:.22em; text-transform:uppercase;
+  text-decoration:none;
+  padding:.85rem 2rem;
+  clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+  transition:background .2s, transform .2s;
+}
+.btn-gold:hover { background:var(--beige); transform:translateY(-3px); }
+
+/* sparkles */
+.sp {
+  position:absolute; pointer-events:none; user-select:none;
+  animation:spAnim 3.5s ease-in-out infinite;
+  font-size:1rem; color:var(--gold);
+}
+@keyframes spAnim {
+  0%,100%{ opacity:.4; transform:scale(1) rotate(0deg); }
+  50%    { opacity:1;   transform:scale(1.5) rotate(18deg); }
+}
+.sp1{top:20%;left:16%;animation-delay:0s;}
+.sp2{top:38%;right:18%;animation-delay:.9s;}
+.sp3{bottom:28%;left:14%;animation-delay:1.7s;}
+.sp4{top:12%;right:12%;animation-delay:2.4s;}
+.sp5{bottom:16%;right:20%;animation-delay:.5s;}
+
+/* scroll arrow */
+.h-arrow {
+  position:absolute; bottom:2.2rem; right:2.8rem; z-index:20;
+  width:46px; height:46px;
+  border:1.5px solid rgba(255,255,255,.25); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--white); text-decoration:none; font-size:1.1rem;
+  animation:bounce 2.2s ease-in-out infinite;
+  transition:border-color .2s, background .2s;
+}
+.h-arrow:hover { border-color:var(--gold); background:var(--gold); color:var(--black); }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
+@keyframes fu { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:none} }
+
+/* ═══════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════ */
+.marquee {
+  background:var(--gold); overflow:hidden;
+  padding:.7rem 0; display:flex;
+}
+.marquee-inner {
+  display:flex; gap:2.5rem;
+  animation:mq 20s linear infinite; white-space:nowrap;
+}
+.marquee-inner span {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:.95rem; letter-spacing:.2em; color:var(--black); flex-shrink:0;
+}
+@keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ═══════════════════════════════════════
+   SHARED
+═══════════════════════════════════════ */
+section { padding:7rem 5vw; }
+.stag {
+  font-family:'Montserrat',sans-serif;
+  font-size:.58rem; font-weight:700; letter-spacing:.38em; text-transform:uppercase;
+  color:var(--gold);
+  display:flex; align-items:center; gap:.7rem; margin-bottom:.9rem;
+}
+.stag::before { content:''; display:inline-block; width:1.8rem; height:1px; background:var(--gold); }
+.sh2 {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3rem,5vw,5.5rem);
+  letter-spacing:.03em; line-height:.9;
+  color:var(--white); margin-bottom:.6rem;
+}
+.sh2 em { font-family:'Dancing Script',cursive; font-style:italic; color:var(--beige); font-size:.62em; }
+.ssub {
+  font-size:.8rem; color:rgba(255,255,255,.38);
+  line-height:1.9; max-width:480px;
+}
+.reveal { opacity:0; transform:translateY(32px); transition:opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1); }
+.reveal.in { opacity:1; transform:none; }
+
+/* ═══════════════════════════════════════
+   SECTION 1 — WORKOUT (your img3 + img1)
+═══════════════════════════════════════ */
+#workout { background:var(--off-black); }
+.wo-wrap {
+  display:grid; grid-template-columns:1.1fr 1fr;
+  gap:5rem; align-items:start; margin-top:4rem;
+}
+.prog-list { display:flex; flex-direction:column; }
+.prog-row {
+  border-top:1px solid rgba(255,255,255,.07);
+  padding:1.8rem 0;
+  display:flex; gap:1.6rem; align-items:flex-start;
+  cursor:default; position:relative;
+  transition:padding-left .3s;
+}
+.prog-row:last-child { border-bottom:1px solid rgba(255,255,255,.07); }
+.prog-row::after {
+  content:''; position:absolute; bottom:0; left:0;
+  width:0; height:1px; background:var(--gold);
+  transition:width .45s cubic-bezier(.22,1,.36,1);
+}
+.prog-row:hover::after { width:100%; }
+.prog-row:hover { padding-left:.5rem; }
+.pnum {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.2rem; color:rgba(255,255,255,.1);
+  line-height:1; flex-shrink:0; min-width:3rem;
+  transition:color .3s;
+}
+.prog-row:hover .pnum { color:var(--gold); }
+.pname {
+  font-family:'Montserrat',sans-serif;
+  font-size:1rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.05em; margin-bottom:.35rem;
+  transition:color .2s;
+}
+.prog-row:hover .pname { color:var(--gold); }
+.pdesc { font-size:.76rem; color:rgba(255,255,255,.35); line-height:1.65; }
+.ptags { display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.6rem; }
+.ptag {
+  font-size:.58rem; letter-spacing:.1em; text-transform:uppercase;
+  border:1px solid rgba(212,196,176,.2); color:var(--beige-d);
+  padding:.2rem .6rem;
+}
+
+.wo-visual { position:sticky; top:7rem; display:flex; flex-direction:column; gap:1rem; }
+.wo-img-main {
+  width:100%; aspect-ratio:3/4;
+  object-fit:cover; object-position:top;
+  filter:brightness(.75) contrast(1.05);
+}
+.wo-img-pair { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.wo-img-pair img {
+  width:100%; aspect-ratio:1;
+  object-fit:cover; object-position:top center;
+  filter:brightness(.65) contrast(1.08);
+}
+.wo-stats {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:1px; background:rgba(255,255,255,.05);
+}
+.wstat { background:var(--grey); padding:1.2rem .8rem; text-align:center; }
+.wstat-n { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--gold); line-height:1; }
+.wstat-l { font-size:.55rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-top:.25rem; }
+
+/* ═══════════════════════════════════════
+   SECTION 2 — FULL BLEED "RUN" PHOTO (img4)
+═══════════════════════════════════════ */
+.bleed-banner {
+  position:relative; overflow:hidden;
+  height:70vh;
+  display:flex; align-items:center; justify-content:center;
+}
+.bleed-banner img {
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:cover; object-position:center;
+  filter:brightness(.45) contrast(1.1);
+  transform:scale(1.04);
+  transition:transform 12s ease;
+}
+.bleed-banner:hover img { transform:scale(1.0); }
+.bleed-txt {
+  position:relative; z-index:2;
+  text-align:center;
+}
+.bleed-txt h2 {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4rem,10vw,10rem);
+  letter-spacing:.06em; line-height:.85;
+  color:var(--white);
+}
+.bleed-txt h2 span { color:var(--gold); }
+.bleed-txt p {
+  font-size:.75rem; letter-spacing:.3em; text-transform:uppercase;
+  color:rgba(255,255,255,.5); margin-top:1.2rem;
+}
+
+/* ═══════════════════════════════════════
+   SECTION 3 — MEALS (img6 hero + lifestyle)
+═══════════════════════════════════════ */
+#meals { background:var(--beige-l); padding-bottom:5rem; }
+#meals .stag { color:var(--green); }
+#meals .stag::before { background:var(--green); }
+#meals .sh2 { color:var(--black); }
+#meals .sh2 em { color:var(--green); }
+#meals .ssub { color:rgba(0,0,0,.45); }
+
+.meals-bento {
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  grid-template-rows:340px 280px;
+  gap:8px;
+  margin-top:3rem;
+}
+.mb { position:relative; overflow:hidden; cursor:pointer; background:var(--black); }
+.mb.tall { grid-row:span 2; }
+.mb img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .6s cubic-bezier(.22,1,.36,1), filter .4s;
+  filter:brightness(.8);
+}
+.mb:hover img { transform:scale(1.06); filter:brightness(.55); }
+.mb-info {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:1.2rem;
+  background:linear-gradient(transparent, rgba(0,0,0,.88));
+}
+.mb-name {
+  font-family:'Montserrat',sans-serif;
+  font-size:.88rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.06em; color:var(--white); margin-bottom:.2rem;
+}
+.mb.tall .mb-name { font-size:1.3rem; }
+.mb-coin { font-size:.65rem; font-weight:600; color:var(--gold); letter-spacing:.1em; }
+.mb-badge {
+  position:absolute; top:.8rem; right:.8rem;
+  background:var(--green); color:var(--white);
+  font-family:'Montserrat',sans-serif; font-weight:700;
+  font-size:.55rem; letter-spacing:.14em; text-transform:uppercase;
+  padding:.22rem .65rem;
+}
+
+/* ═══════════════════════════════════════
+   SECTION 4 — COINS (dark, dramatic)
+═══════════════════════════════════════ */
+#coins { background:var(--grey); position:relative; overflow:hidden; }
+#coins::before {
+  content:'H₵';
+  position:absolute; font-family:'Bebas Neue',sans-serif;
+  font-size:38vw; color:rgba(240,192,64,.03);
+  right:-5%; top:50%; transform:translateY(-50%);
+  pointer-events:none; line-height:1; letter-spacing:-.02em;
+}
+.coins-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:6rem; align-items:center;
+}
+.coin-steps { display:flex; flex-direction:column; gap:0; margin-top:3rem; }
+.cstep {
+  display:flex; gap:1.8rem; align-items:flex-start;
+  padding:1.8rem 0; border-top:1px solid rgba(255,255,255,.06);
+  position:relative;
+}
+.cstep:last-child { border-bottom:1px solid rgba(255,255,255,.06); }
+.ci {
+  width:2.8rem; height:2.8rem; flex-shrink:0;
+  background:rgba(240,192,64,.09);
+  border:1px solid rgba(240,192,64,.22);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem;
+}
+.ct { font-family:'Montserrat',sans-serif; font-size:.85rem; font-weight:900; text-transform:uppercase; letter-spacing:.06em; margin-bottom:.35rem; }
+.cd { font-size:.76rem; color:rgba(255,255,255,.35); line-height:1.65; }
+
+.coin-right { display:flex; flex-direction:column; align-items:center; gap:1.5rem; }
+.coin-orb {
+  width:160px; height:160px;
+  background:radial-gradient(circle at 35% 35%, #FFE566, #B8860B);
+  border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  box-shadow: 0 0 80px rgba(240,192,64,.2), inset 0 -4px 12px rgba(0,0,0,.3);
+  animation:coinR 6s ease-in-out infinite;
+}
+@keyframes coinR {
+  0%,100%{ transform:rotateY(0deg); box-shadow:0 0 80px rgba(240,192,64,.2); }
+  50%    { transform:rotateY(18deg); box-shadow:0 0 120px rgba(240,192,64,.38); }
+}
+.coin-sym { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:var(--black); line-height:1; }
+.coin-lbl { font-family:'Montserrat',sans-serif; font-size:.5rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(0,0,0,.55); }
+
+/* img7 (lifestyle / morning ritual) framed */
+.coin-lifestyle {
+  width:100%; aspect-ratio:4/5;
+  object-fit:cover; object-position:center;
+  filter:brightness(.75) saturate(1.1);
+  border:1px solid rgba(255,255,255,.06);
+}
+.coin-minis {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; background:rgba(255,255,255,.06); width:100%;
+}
+.cmin { background:var(--grey2); padding:1.1rem .8rem; text-align:center; }
+.cmin-n { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; color:var(--gold); line-height:1; }
+.cmin-l { font-size:.55rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.28); margin-top:.2rem; }
+
+/* ═══════════════════════════════════════
+   SECTION 5 — APPAREL (img8 + img5 hero)
+═══════════════════════════════════════ */
+#apparel { background:var(--black); }
+.app-intro {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:4rem; align-items:end; margin-bottom:3rem;
+}
+.size-wrap { margin-top:1rem; }
+.szp {
+  display:inline-block;
+  border:1px solid rgba(212,196,176,.2);
+  color:var(--beige-d);
+  font-size:.58rem; letter-spacing:.1em; text-transform:uppercase;
+  padding:.28rem .75rem; margin:.2rem;
+  cursor:pointer; transition:background .2s, color .2s, border-color .2s;
+}
+.szp:hover, .szp.on { background:var(--gold); color:var(--black); border-color:var(--gold); }
+
+.app-grid {
+  display:grid;
+  grid-template-columns:1.3fr 1fr 1fr;
+  grid-template-rows:auto auto;
+  gap:8px;
+}
+.ac { position:relative; overflow:hidden; background:var(--grey); cursor:pointer; }
+.ac.tall { grid-row:span 2; }
+.ac img {
+  width:100%; height:100%; object-fit:cover; object-position:top center;
+  filter:brightness(.82) saturate(.92);
+  transition:transform .6s cubic-bezier(.22,1,.36,1), filter .4s;
+}
+.ac.tall img { aspect-ratio:auto; min-height:600px; }
+.ac:not(.tall) img { aspect-ratio:3/4; }
+.ac:hover img { transform:scale(1.05); filter:brightness(.6); }
+.ac-ov {
+  position:absolute; inset:0;
+  display:flex; align-items:flex-end; padding:1.4rem;
+  background:linear-gradient(transparent 50%, rgba(0,0,0,.9));
+  opacity:0; transition:opacity .3s;
+}
+.ac:hover .ac-ov { opacity:1; }
+.ac-name {
+  font-family:'Montserrat',sans-serif;
+  font-weight:900; font-size:.82rem; text-transform:uppercase; letter-spacing:.07em;
+}
+.ac-price { font-size:.72rem; color:var(--gold); margin-top:.2rem; }
+.ac-badge {
+  position:absolute; top:.8rem; left:.8rem;
+  background:var(--green); color:#fff;
+  font-family:'Montserrat',sans-serif; font-weight:700;
+  font-size:.52rem; letter-spacing:.14em; text-transform:uppercase;
+  padding:.2rem .6rem;
+}
+
+/* ═══════════════════════════════════════
+   SECTION 6 — COMMUNITY / ABOUT (dark green)
+═══════════════════════════════════════ */
+#community {
+  background:var(--green);
+  position:relative; overflow:hidden;
+}
+#community::before {
+  content:'HAVANA';
+  position:absolute; font-family:'Bebas Neue',sans-serif;
+  font-size:22vw; color:rgba(255,255,255,.04);
+  left:50%; top:50%; transform:translate(-50%,-50%);
+  pointer-events:none; white-space:nowrap;
+}
+.com-layout {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:5rem; align-items:center;
+}
+.com-img-stack { position:relative; }
+.com-img-main {
+  width:100%; aspect-ratio:3/4;
+  object-fit:cover; object-position:top;
+  filter:brightness(.8) contrast(1.05);
+}
+.com-img-accent {
+  position:absolute; bottom:-2rem; right:-2rem;
+  width:55%; aspect-ratio:1;
+  object-fit:cover; object-position:top;
+  filter:brightness(.75);
+  border:4px solid var(--green);
+}
+.com-text .stag { color:var(--gold); }
+.com-text .stag::before { background:var(--gold); }
+.com-text .sh2 { color:var(--white); }
+.com-text .sh2 em { color:rgba(212,196,176,.8); }
+.com-text .ssub { color:rgba(255,255,255,.45); }
+
+.testi-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1rem; margin-top:4rem;
+}
+.tc {
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+  padding:1.8rem;
+  transition:background .3s;
+}
+.tc:hover { background:rgba(255,255,255,.12); }
+.tc-stars { color:var(--gold); font-size:.8rem; letter-spacing:.08em; margin-bottom:.7rem; }
+.tc-txt {
+  font-family:'Dancing Script',cursive;
+  font-size:1.05rem; color:var(--white);
+  line-height:1.65; margin-bottom:1rem;
+}
+.tc-name { font-size:.68rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.45); }
+
+/* ═══════════════════════════════════════
+   SECTION 7 — MEMBERSHIP PLANS
+═══════════════════════════════════════ */
+#membership { background:var(--off-black); }
+.plans {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; background:rgba(255,255,255,.06);
+  margin-top:3.5rem;
+}
+.plan { background:var(--grey); padding:2.4rem; position:relative; transition:background .3s; }
+.plan:hover { background:var(--grey2); }
+.plan.hot { background:var(--gold); color:var(--black); }
+.plan.hot:hover { background:#e0b030; }
+.plan-badge {
+  position:absolute; top:-1px; left:50%; transform:translateX(-50%);
+  background:var(--white); color:var(--black);
+  font-family:'Montserrat',sans-serif; font-weight:900;
+  font-size:.55rem; letter-spacing:.2em; text-transform:uppercase;
+  padding:.3rem 1rem; white-space:nowrap;
+}
+.plan-name { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:.06em; margin-bottom:.2rem; }
+.plan-tag { font-size:.68rem; opacity:.55; margin-bottom:1.4rem; }
+.plan-price {
+  font-family:'Bebas Neue',sans-serif; font-size:3.2rem; line-height:1;
+  margin-bottom:.2rem; letter-spacing:.02em;
+}
+.plan-price sup { font-size:1.2rem; font-weight:400; }
+.plan-price sub { font-size:.9rem; font-weight:400; opacity:.6; }
+.plan-div { height:1px; background:rgba(255,255,255,.1); margin:1.4rem 0; }
+.plan.hot .plan-div { background:rgba(0,0,0,.15); }
+.plan-feats { list-style:none; display:flex; flex-direction:column; gap:.65rem; margin-bottom:1.8rem; }
+.plan-feats li { font-size:.78rem; display:flex; gap:.6rem; align-items:flex-start; }
+.plan-feats li::before { content:'✦'; font-size:.6rem; flex-shrink:0; margin-top:.12rem; }
+.plan .plan-feats li::before { color:var(--gold); }
+.plan.hot .plan-feats li { color:rgba(0,0,0,.8); }
+.plan.hot .plan-feats li::before { color:rgba(0,0,0,.5); }
+.plan-btn {
+  display:block; text-align:center; text-decoration:none;
+  padding:.8rem; font-family:'Montserrat',sans-serif;
+  font-size:.68rem; font-weight:900; letter-spacing:.18em; text-transform:uppercase;
+  transition:all .2s;
+}
+.plan-btn-out { border:1.5px solid var(--gold); color:var(--gold); }
+.plan-btn-out:hover { background:var(--gold); color:var(--black); }
+.plan-btn-blk { background:var(--black); color:var(--gold); }
+.plan-btn-blk:hover { background:var(--grey); }
+
+/* ═══════════════════════════════════════
+   SECTION 8 — CTA CONTACT
+═══════════════════════════════════════ */
+#contact { background:var(--black); }
+.cta-block {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:5rem; align-items:center;
+  border:1px solid rgba(255,255,255,.07);
+  padding:5rem;
+  background:var(--grey);
+  position:relative; overflow:hidden;
+}
+.cta-block::before {
+  content:'';
+  position:absolute; width:500px; height:500px;
+  background:radial-gradient(circle, rgba(240,192,64,.07), transparent 65%);
+  top:-100px; right:-100px; pointer-events:none;
+}
+.cta-label { font-family:'Montserrat',sans-serif; font-size:.58rem; font-weight:700; letter-spacing:.35em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; }
+.cta-h {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,5vw,5rem);
+  line-height:.9; letter-spacing:.03em; color:var(--white);
+}
+.cta-h span { color:var(--gold); }
+.cta-p { font-size:.78rem; color:rgba(255,255,255,.35); line-height:1.85; margin-top:1.2rem; max-width:380px; }
+.cta-form { display:flex; flex-direction:column; gap:.75rem; }
+.ci2 {
+  background:transparent;
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--white); font-family:'Poppins',sans-serif;
+  font-size:.78rem; padding:.85rem 1.1rem; outline:none;
+  transition:border-color .2s;
+}
+.ci2:focus { border-color:var(--gold); }
+.ci2::placeholder { color:rgba(255,255,255,.22); }
+.ci2 option { background:#111; }
+.csub {
+  background:var(--gold); color:var(--black);
+  font-family:'Montserrat',sans-serif;
+  font-size:.68rem; font-weight:900; letter-spacing:.22em; text-transform:uppercase;
+  border:none; padding:1rem; cursor:pointer;
+  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+  transition:background .2s, transform .2s;
+}
+.csub:hover { background:var(--beige); transform:translateY(-2px); }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer {
+  background:var(--black);
+  border-top:1px solid rgba(255,255,255,.05);
+  padding:4rem 5vw 2rem;
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:3rem;
+}
+.fl {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem; letter-spacing:.08em; color:var(--white); margin-bottom:.5rem;
+}
+.fl span { color:var(--gold); font-family:'Dancing Script',cursive; font-size:.6em; display:block; line-height:1; }
+.ft { font-size:.74rem; color:rgba(255,255,255,.28); line-height:1.7; max-width:220px; }
+.fch { font-family:'Montserrat',sans-serif; font-size:.55rem; font-weight:700; letter-spacing:.28em; text-transform:uppercase; color:rgba(255,255,255,.22); margin-bottom:1.2rem; }
+.flinks { list-style:none; display:flex; flex-direction:column; gap:.6rem; }
+.flinks a { font-size:.78rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s; }
+.flinks a:hover { color:var(--gold); }
+.fbot {
+  grid-column:1/-1;
+  border-top:1px solid rgba(255,255,255,.05);
+  padding-top:1.5rem;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:.68rem; color:rgba(255,255,255,.2);
+}
+.fsoc { display:flex; gap:.8rem; }
+.fsoc a {
+  width:2rem; height:2rem;
+  border:1px solid rgba(255,255,255,.12); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.75rem; color:rgba(255,255,255,.4); text-decoration:none;
+  transition:border-color .2s, color .2s;
+}
+.fsoc a:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:960px){
+  #hero { grid-template-columns:1fr; }
+  .h-panel { display:none; }
+  .h-center { width:100%; padding:7rem 2rem 4rem; }
+  .wo-wrap,.coins-grid,.app-intro,.com-layout,.cta-block { grid-template-columns:1fr; gap:2.5rem; }
+  .meals-bento { grid-template-columns:1fr 1fr; grid-template-rows:auto; }
+  .mb.tall { grid-row:span 1; }
+  .app-grid { grid-template-columns:1fr 1fr; }
+  .ac.tall { grid-row:span 1; }
+  .ac.tall img { min-height:auto; aspect-ratio:3/4; }
+  .plans { grid-template-columns:1fr; gap:1px; }
+  .testi-grid { grid-template-columns:1fr; }
+  footer { grid-template-columns:1fr 1fr; }
+  nav { padding:1.2rem 1.5rem; }
+  section { padding:4.5rem 4vw; }
+  .cta-block { padding:3rem 2rem; }
+  .com-img-accent { display:none; }
+}
+@media(max-width:600px){
+  .meals-bento,.app-grid { grid-template-columns:1fr; }
+  footer { grid-template-columns:1fr; }
+  .nav-links { gap:1.2rem; }
+  .coin-minis { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+
+<!-- ════ NAV ════ -->
+<nav id="nav">
+  <div class="nav-logo" id="nLogo">HAVANA <span>Fitness</span></div>
+  <ul class="nav-links">
+    <li><a href="#workout">Workout</a></li>
+    <li><a href="#meals">Meal</a></li>
+    <li><a href="#apparel">Cloths</a></li>
+    <li><a href="#coins">Coins</a></li>
+    <li><a href="#contact" class="nav-join">Join</a></li>
+  </ul>
+</nav>
+
+<!-- ════ HERO ════ -->
+<section id="hero" style="padding:0;">
+  <!-- Left panel — img1 (hanging bar read) -->
+  <div class="h-panel">
+    <img src="img1.jpeg" alt="Strength meets mind"/>
+    <div class="h-panel-label">Strength · Mind · Body</div>
+  </div>
+
+  <!-- Center brand -->
+  <div class="h-center">
+    <div class="sp sp1">✨</div>
+    <div class="sp sp2">✦</div>
+    <div class="sp sp3">✨</div>
+    <div class="sp sp4">✦</div>
+    <div class="sp sp5">✨</div>
+
+    <div class="h-eye">India's Female-First Fitness Brand</div>
+    <div class="h-logo">HAVANA</div>
+    <div class="h-script">Fitness</div>
+    <div class="h-divider"></div>
+    <div class="h-tag">Pilates · Cardio · Strength<br/>Coins · Meals · Style</div>
+    <div class="h-cta">
+      <a href="#workout" class="btn-gold">Begin Your Journey</a>
+    </div>
+  </div>
+
+  <!-- Right panel — img3 (yoga pose) -->
+  <div class="h-panel">
+    <img src="img3.jpeg" alt="Pilates & yoga"/>
+    <div class="h-panel-label">Pilates · Flow · Grace</div>
+  </div>
+
+  <a href="#workout" class="h-arrow">↓</a>
+</section>
+
+<!-- ════ MARQUEE ════ -->
+<div class="marquee">
+  <div class="marquee-inner">
+    <span>PILATES ✦</span><span>CARDIO ✦</span><span>STRENGTH ✦</span>
+    <span>HAVANA COINS ✦</span><span>CLEAN MEALS ✦</span><span>ACTIVEWEAR ✦</span>
+    <span>FEMALE FIRST ✦</span><span>CYCLE SYNC ✦</span><span>REFORMER ✦</span>
+    <span>XS–5XL SIZES ✦</span><span>BENGALURU ✦</span>
+    <!-- duplicate for seamless loop -->
+    <span>PILATES ✦</span><span>CARDIO ✦</span><span>STRENGTH ✦</span>
+    <span>HAVANA COINS ✦</span><span>CLEAN MEALS ✦</span><span>ACTIVEWEAR ✦</span>
+    <span>FEMALE FIRST ✦</span><span>CYCLE SYNC ✦</span><span>REFORMER ✦</span>
+    <span>XS–5XL SIZES ✦</span><span>BENGALURU ✦</span>
+  </div>
+</div>
+
+<!-- ════ WORKOUT ════ -->
+<section id="workout">
+  <div class="stag reveal">Move</div>
+  <h2 class="sh2 reveal">TRAIN LIKE<br/><em>a queen</em></h2>
+  <p class="ssub reveal">Every program at Havana is built around female physiology — your cycle, your strength, your goals. No bro-science. Pure precision.</p>
+
+  <div class="wo-wrap">
+    <div class="prog-list">
+      <div class="prog-row reveal">
+        <div class="pnum">01</div>
+        <div>
+          <div class="pname">Reformer Pilates</div>
+          <p class="pdesc">Studio-grade reformers. Deep core activation, postural alignment, and that long-lean transformation — low impact, extraordinary results.</p>
+          <div class="ptags"><span class="ptag">Core</span><span class="ptag">Posture</span><span class="ptag">Flexibility</span></div>
+        </div>
+      </div>
+      <div class="prog-row reveal">
+        <div class="pnum">02</div>
+        <div>
+          <div class="pname">Cardio Dance + HIIT</div>
+          <p class="pdesc">Rhythmic, high-energy cardio fused with HIIT intervals. Burns, sculpts, and floods your body with endorphins — never feels like "working out."</p>
+          <div class="ptags"><span class="ptag">Fat Burn</span><span class="ptag">Energy</span><span class="ptag">Joy</span></div>
+        </div>
+      </div>
+      <div class="prog-row reveal">
+        <div class="pnum">03</div>
+        <div>
+          <div class="pname">Correct Strength Training</div>
+          <p class="pdesc">Evidence-based lifting for women. Form before ego. Debunking myths, fixing imbalances, building strength that serves you for life.</p>
+          <div class="ptags"><span class="ptag">Form First</span><span class="ptag">Muscle</span><span class="ptag">Bone Health</span></div>
+        </div>
+      </div>
+      <div class="prog-row reveal">
+        <div class="pnum">04</div>
+        <div>
+          <div class="pname">Cycle-Synced Training</div>
+          <p class="pdesc">Train with your cycle, not against it. Programs adapt to your follicular, ovulatory, luteal, and menstrual phases — honouring your hormones.</p>
+          <div class="ptags"><span class="ptag">Hormones</span><span class="ptag">Recovery</span><span class="ptag">Science</span></div>
+        </div>
+      </div>
+      <div class="prog-row reveal">
+        <div class="pnum">05</div>
+        <div>
+          <div class="pname">Mat Pilates + Mobility</div>
+          <p class="pdesc">Zero equipment, pure body intelligence. Develops proprioception, joint health, and mind-body awareness. Perfect for every level.</p>
+          <div class="ptags"><span class="ptag">Beginner</span><span class="ptag">Mobility</span><span class="ptag">Mindful</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wo-visual reveal">
+      <!-- img2 (bridge pose, moody) -->
+      <img class="wo-img-main" src="img2.jpeg" alt="Pilates bridge pose"/>
+      <div class="wo-img-pair">
+        <!-- img5 (plank/downdog, mat) -->
+        <img src="img5.jpeg" alt="Mat work"/>
+        <!-- img1 (hang read) -->
+        <img src="img1.jpeg" alt="Strength"/>
+      </div>
+      <div class="wo-stats">
+        <div class="wstat"><div class="wstat-n">5+</div><div class="wstat-l">Programs</div></div>
+        <div class="wstat"><div class="wstat-n">100%</div><div class="wstat-l">Female-First</div></div>
+        <div class="wstat"><div class="wstat-n">45–90</div><div class="wstat-l">Min Classes</div></div>
+        <div class="wstat"><div class="wstat-n">∞</div><div class="wstat-l">Transform</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ FULL BLEED — RUN ════ -->
+<div class="bleed-banner reveal" style="padding:0;">
+  <!-- img4 — the motion-blur run shot, very cinematic -->
+  <img src="img4.jpeg" alt="Run with Havana"/>
+  <div class="bleed-txt">
+    <h2>SHE <span>RUNS</span><br/>THE WORLD</h2>
+    <p>✦ Every step earns · Every session matters ✦</p>
+  </div>
+</div>
+
+<!-- ════ MEALS ════ -->
+<section id="meals">
+  <div class="stag reveal">Nourish</div>
+  <h2 class="sh2 reveal">EAT WELL,<br/><em>earn it</em></h2>
+  <p class="ssub reveal">Chef-crafted, dietitian-approved clean Indian meals — redeemable with Havana Coins after every session. No extra charge. Just sweat and scan.</p>
+
+  <div class="meals-bento">
+    <!-- img6 — the beautiful food bowl (TALL feature) -->
+    <div class="mb tall reveal">
+      <img src="img6.jpeg" alt="Power Bowl"/>
+      <div class="mb-badge">Today's Feature</div>
+      <div class="mb-info">
+        <div class="mb-name">Super Seed Wellness Bowl</div>
+        <div class="mb-coin">🪙 20 Havana Coins</div>
+      </div>
+    </div>
+
+    <div class="mb reveal">
+      <img src="img7.jpeg" style="object-position:center;" alt="Morning ritual"/>
+      <div class="mb-badge">Morning</div>
+      <div class="mb-info">
+        <div class="mb-name">Golden Morning Ritual</div>
+        <div class="mb-coin">🪙 8 Coins</div>
+      </div>
+    </div>
+
+    <div class="mb reveal">
+      <img src="img6.jpeg" style="object-position:70% 30%;" alt="Recovery bowl"/>
+      <div class="mb-info">
+        <div class="mb-name">Antioxidant Recovery Bowl</div>
+        <div class="mb-coin">🪙 12 Coins</div>
+      </div>
+    </div>
+
+    <div class="mb reveal">
+      <img src="img5.jpeg" alt="Post-workout"/>
+      <div class="mb-info">
+        <div class="mb-name">Protein Reload Plate</div>
+        <div class="mb-coin">🪙 15 Coins</div>
+      </div>
+    </div>
+
+    <div class="mb reveal">
+      <img src="img7.jpeg" style="object-position:40% 0%;" alt="Mindful meal"/>
+      <div class="mb-badge">Gut Health</div>
+      <div class="mb-info">
+        <div class="mb-name">Millet Khichdi Box</div>
+        <div class="mb-coin">🪙 10 Coins</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ COINS ════ -->
+<section id="coins">
+  <div class="coins-grid">
+    <div>
+      <div class="stag reveal">Rewards</div>
+      <h2 class="sh2 reveal">SWEAT<br/>EARNS<br/><em>you more</em></h2>
+      <p class="ssub reveal">Every session credits Havana Coins to your app — redeemable for meals, apparel discounts, and elite experiences. Your effort, your currency.</p>
+
+      <div class="coin-steps">
+        <div class="cstep reveal">
+          <div class="ci">🏃‍♀️</div>
+          <div>
+            <div class="ct">Attend Your Session</div>
+            <div class="cd">Check into any Havana class — Pilates, cardio, strength, or reformer. Coins auto-credit on checkout. No manual tracking.</div>
+          </div>
+        </div>
+        <div class="cstep reveal">
+          <div class="ci">🪙</div>
+          <div>
+            <div class="ct">Earn Havana Coins</div>
+            <div class="cd">+10 coins (45 min) · +15 coins (60 min) · +20 coins (90-min Reformer). Bonus coins on streaks, challenges & referrals.</div>
+          </div>
+        </div>
+        <div class="cstep reveal">
+          <div class="ci">🍱</div>
+          <div>
+            <div class="ct">Choose Your Reward</div>
+            <div class="cd">Browse the nutrition bar, pick activewear, or save up for exclusive Elite retreat experiences and body consultations.</div>
+          </div>
+        </div>
+        <div class="cstep reveal">
+          <div class="ci">✨</div>
+          <div>
+            <div class="ct">Scan & Redeem</div>
+            <div class="cd">One tap on your Havana app. Meal ready in 5 minutes. Coins never expire — they roll over every month, forever.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coin-right reveal">
+      <!-- img7 — the warm morning lifestyle shot, perfectly fits the "reward/ritual" vibe -->
+      <img class="coin-lifestyle" src="img7.jpeg" alt="Morning ritual"/>
+      <div class="coin-minis">
+        <div class="cmin"><div class="cmin-n">+20</div><div class="cmin-l">Max Per Session</div></div>
+        <div class="cmin"><div class="cmin-n">2×</div><div class="cmin-l">Elite Multiplier</div></div>
+        <div class="cmin"><div class="cmin-n">∞</div><div class="cmin-l">Never Expire</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ APPAREL ════ -->
+<section id="apparel">
+  <div class="app-intro">
+    <div>
+      <div class="stag reveal">Experience Centre</div>
+      <h2 class="sh2 reveal">WEAR YOUR<br/><em>power</em></h2>
+      <p class="ssub reveal">India's first activewear experience centre built for Indian women — XS to 5XL, updated daily using real member fit data from Bengaluru.</p>
+    </div>
+    <div class="reveal">
+      <p style="font-size:.72rem;color:rgba(255,255,255,.4);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.8rem;">Choose your size ↓</p>
+      <div class="size-wrap">
+        <span class="szp on">XS</span><span class="szp">S</span><span class="szp">M</span>
+        <span class="szp">L</span><span class="szp">XL</span><span class="szp">2XL</span>
+        <span class="szp">3XL</span><span class="szp">4XL</span><span class="szp">5XL</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-grid">
+    <!-- img8 — the green gymshark outfit (HERO tall) -->
+    <div class="ac tall reveal">
+      <img src="img8.jpeg" alt="Havana Activewear"/>
+      <div class="ac-badge">New Drop</div>
+      <div class="ac-ov">
+        <div>
+          <div class="ac-name">Studio Flex Set</div>
+          <div class="ac-price">From ₹2,499</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- img3 — yoga pose (shows apparel in action) -->
+    <div class="ac reveal">
+      <img src="img3.jpeg" alt="Pilates Wear"/>
+      <div class="ac-badge">Pilates</div>
+      <div class="ac-ov">
+        <div>
+          <div class="ac-name">Flow Pilates Set</div>
+          <div class="ac-price">From ₹1,899</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- img2 — moody pilates bridge -->
+    <div class="ac reveal">
+      <img src="img2.jpeg" alt="Strength Wear"/>
+      <div class="ac-badge">Strength</div>
+      <div class="ac-ov">
+        <div>
+          <div class="ac-name">Power Lift Leggings</div>
+          <div class="ac-price">From ₹1,599</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- img5 — plank / mat -->
+    <div class="ac reveal">
+      <img src="img5.jpeg" alt="Mat Wear"/>
+      <div class="ac-badge">Custom</div>
+      <div class="ac-ov">
+        <div>
+          <div class="ac-name">Personalise Your Set</div>
+          <div class="ac-price">Bespoke Pricing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- img1 — hanging bar (strength/movement) -->
+    <div class="ac reveal">
+      <img src="img1.jpeg" alt="Cardio Wear"/>
+      <div class="ac-badge">Cardio</div>
+      <div class="ac-ov">
+        <div>
+          <div class="ac-name">Rhythm Sports Bra</div>
+          <div class="ac-price">From ₹1,299</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ COMMUNITY ════ -->
+<section id="community">
+  <div class="com-layout">
+    <div class="com-img-stack reveal">
+      <!-- img4 — motion-blur run on left -->
+      <img class="com-img-main" src="img4.jpeg" alt="Community"/>
+      <!-- img3 — yoga on top right accent -->
+      <img class="com-img-accent" src="img3.jpeg" alt="Yoga community"/>
+    </div>
+    <div class="com-text">
+      <div class="stag reveal">Community</div>
+      <h2 class="sh2 reveal">SHE WHO<br/><em>moves together</em><br/>WINS TOGETHER</h2>
+      <p class="ssub reveal">Havana is more than a gym — it is a sisterhood. Women who show up, sweat, nourish themselves, and celebrate every victory, big and small.</p>
+      <div style="margin-top:2.5rem;" class="reveal">
+        <a href="#contact" class="btn-gold">Join the Sisterhood</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="testi-grid" style="margin-top:5rem;">
+    <div class="tc reveal">
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-txt">"I've been to gyms my whole life and always felt out of place. Havana is the first space where I felt genuinely seen. The reformer changed my posture in six weeks."</p>
+      <div class="tc-name">Priya Mehta · Bengaluru · Glow Member</div>
+    </div>
+    <div class="tc reveal">
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-txt">"The coin system is genius. I actually look forward to my post-workout meal now. Three months in — haven't skipped a single session."</p>
+      <div class="tc-name">Ananya Krishnan · Bengaluru · Elite Member</div>
+    </div>
+    <div class="tc reveal">
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-txt">"Finding activewear in a 3XL that truly fits an Indian body was impossible — until Havana. The experience centre had me in tears. The good kind."</p>
+      <div class="tc-name">Deepa Nair · Bengaluru · Starter Member</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ MEMBERSHIP ════ -->
+<section id="membership">
+  <div class="stag reveal">Membership</div>
+  <h2 class="sh2 reveal">ONE SPACE,<br/><em>infinite</em> POWER</h2>
+  <p class="ssub reveal">All memberships include access to our experience centre, coin rewards, and nutrition bar. Choose what fits your life.</p>
+
+  <div class="plans reveal" style="margin-top:3.5rem;">
+    <div class="plan">
+      <div class="plan-name">Starter</div>
+      <div class="plan-tag">For the curious beginner</div>
+      <div class="plan-price"><sup>₹</sup>1,499<sub>/mo</sub></div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li>8 group classes per month</li>
+        <li>Mat Pilates & Cardio access</li>
+        <li>Havana Coins on every session</li>
+        <li>Nutrition bar coin redemption</li>
+        <li>Experience Centre browsing</li>
+        <li>App booking & tracking</li>
+      </ul>
+      <a href="#contact" class="plan-btn plan-btn-out">Get Started</a>
+    </div>
+
+    <div class="plan hot">
+      <div class="plan-badge">★ Most Popular</div>
+      <div class="plan-name">Glow</div>
+      <div class="plan-tag">The complete Havana experience</div>
+      <div class="plan-price"><sup>₹</sup>2,999<sub>/mo</sub></div>
+      <div class="plan-div" style="background:rgba(0,0,0,.15);"></div>
+      <ul class="plan-feats">
+        <li>Unlimited group classes</li>
+        <li>Reformer Pilates — 4 sessions/mo</li>
+        <li>All programs: Pilates, Cardio, Strength</li>
+        <li>1.5× Coin multiplier every session</li>
+        <li>Priority meal selections</li>
+        <li>Experience Centre — 10% discount</li>
+        <li>1 body composition scan/month</li>
+        <li>Cycle-synced program access</li>
+      </ul>
+      <a href="#contact" class="plan-btn plan-btn-blk">Join Now — Best Value</a>
+    </div>
+
+    <div class="plan">
+      <div class="plan-name">Havana Elite</div>
+      <div class="plan-tag">For the committed woman</div>
+      <div class="plan-price"><sup>₹</sup>5,499<sub>/mo</sub></div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li>Unlimited all classes + Reformer</li>
+        <li>4 personal training sessions/month</li>
+        <li>2× Coin multiplier — maximum rewards</li>
+        <li>Unlimited daily meal redemptions</li>
+        <li>Experience Centre — 20% lifetime discount</li>
+        <li>Monthly custom size profiling</li>
+        <li>Priority booking — always first</li>
+        <li>Quarterly dietitian consultation</li>
+        <li>Exclusive retreats & member events</li>
+      </ul>
+      <a href="#contact" class="plan-btn plan-btn-out">Go Elite</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════ CONTACT ════ -->
+<section id="contact">
+  <div class="cta-block reveal">
+    <div>
+      <div class="cta-label">✨ Your transformation starts today</div>
+      <h2 class="cta-h">READY TO<br/><span>BECOME</span><br/>HAVANA?</h2>
+      <p class="cta-p">Join Bengaluru's most empowering female fitness movement. Book your free trial class and experience the Havana difference — in person.</p>
+    </div>
+    <div class="cta-form">
+      <input class="ci2" type="text" placeholder="Your Name"/>
+      <input class="ci2" type="tel" placeholder="Phone Number"/>
+      <input class="ci2" type="email" placeholder="Email Address"/>
+      <select class="ci2">
+        <option value="" disabled selected>I'm interested in...</option>
+        <option>Reformer Pilates</option>
+        <option>Cardio Dance + HIIT</option>
+        <option>Strength Training</option>
+        <option>Glow Membership</option>
+        <option>Elite Membership</option>
+        <option>Activewear Experience Centre</option>
+      </select>
+      <button class="csub">Book My Free Trial →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
+<footer>
+  <div>
+    <div class="fl">HAVANA<span>Fitness</span></div>
+    <p class="ft">India's first female-first fitness ecosystem — designed for the Indian woman's body, rhythm, and soul. Bengaluru.</p>
+  </div>
+  <div>
+    <div class="fch">Programs</div>
+    <ul class="flinks">
+      <li><a href="#">Reformer Pilates</a></li>
+      <li><a href="#">Cardio + HIIT</a></li>
+      <li><a href="#">Strength Training</a></li>
+      <li><a href="#">Cycle-Synced Fitness</a></li>
+      <li><a href="#">Mat Pilates</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="fch">Experience</div>
+    <ul class="flinks">
+      <li><a href="#">Activewear Centre</a></li>
+      <li><a href="#">Indian Size Guide</a></li>
+      <li><a href="#">Custom Apparel</a></li>
+      <li><a href="#">Nutrition Bar</a></li>
+      <li><a href="#">Havana Coins</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="fch">Company</div>
+    <ul class="flinks">
+      <li><a href="#">About Havana</a></li>
+      <li><a href="#">Membership Plans</a></li>
+      <li><a href="#">Book a Trial</a></li>
+      <li><a href="#">Careers</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+  </div>
+  <div class="fbot">
+    <span>© 2025 Havana Fitness · Made with love for Indian women · Bengaluru</span>
+    <div class="fsoc">
+      <a href="#">ig</a><a href="#">yt</a><a href="#">wa</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── cursor ── */
+const cur = document.getElementById('cur');
+let mx=0, my=0, cx=0, cy=0;
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+(function loop(){ cx+=(mx-cx)*.18; cy+=(my-cy)*.18;
+  cur.style.transform=`translate(${cx-7}px,${cy-7}px)`;
+  requestAnimationFrame(loop); })();
+document.querySelectorAll('a,button,.prog-row,.ac,.mb,.szp,.plan').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+});
+
+/* ── scroll reveal ── */
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('in'), i*60);
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+
+/* ── nav scroll ── */
+const nav=document.getElementById('nav'), nL=document.getElementById('nLogo');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled', window.scrollY>60);
+  nL.classList.toggle('show', window.scrollY>window.innerHeight*.6);
+});
+
+/* ── parallax hero panels ── */
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  document.querySelectorAll('.h-panel img').forEach(img=>{
+    img.style.transform=`scale(1.06) translateY(${y*.12}px)`;
+  });
+});
+
+/* ── size pill toggle ── */
+document.querySelectorAll('.szp').forEach(p=>{
+  p.addEventListener('click',()=>{
+    document.querySelectorAll('.szp').forEach(x=>x.classList.remove('on'));
+    p.classList.add('on');
+  });
+});
+</script>
+</body>
+</html>
